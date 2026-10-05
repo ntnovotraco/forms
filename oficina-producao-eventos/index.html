@@ -139,6 +139,8 @@ button:focus-visible, .opt:focus-visible, .check:has(input:focus-visible) { outl
 .bonus-title { margin: 0; font-size: 1.02rem; font-weight: 600; line-height: 1.3; color: var(--accent); text-wrap: balance; }
 .bonus p { margin: 0; }
 .bonus p:not(.bonus-title) { color: var(--muted); font-size: .95rem; }
+.bonus.solid { background: var(--accent); border-color: var(--accent); }
+.bonus.solid .bonus-title, .bonus.solid p:not(.bonus-title) { color: var(--accent-ink); }
 .status { margin: 0; justify-self: start; padding: .45rem .8rem; border-radius: 6px; background: var(--accent-soft); color: var(--accent); font-weight: 600; }
 .status.closed { background: var(--error-soft); color: var(--error); }
 .test-banner { position: fixed; left: 0; right: 0; bottom: 0; padding: .45rem 1rem calc(.45rem + env(safe-area-inset-bottom, 0px)); background: #fff4d6; color: #6b4e00; font-size: .85rem; text-align: center; z-index: 6; }
@@ -199,7 +201,7 @@ button:focus-visible, .opt:focus-visible, .check:has(input:focus-visible) { outl
       <div><dt>Vagas</dt><dd>Limitadas, por ordem de inscrição<span class="left" id="vagasLeft" hidden></span></dd></div>
     </dl>
 
-    <div class="bonus">
+    <div class="bonus solid">
       <p class="bonus-title">Certificado de 8h/aula de estágio</p>
       <p>Todos os participantes recebem certificado de participação.</p>
     </div>
