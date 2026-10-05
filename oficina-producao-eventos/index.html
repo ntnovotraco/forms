@@ -31,7 +31,7 @@
   --accent-ink: #ffffff;
   --error: #c4283d;
   --error-soft: #fcecee;
-  --topbar-h: 4.5rem;
+  --topbar-h: 6rem;
   --font: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
   color-scheme: light;
 }
@@ -143,8 +143,13 @@ button:focus-visible, .opt:focus-visible, .check:has(input:focus-visible) { outl
 .test-banner { position: fixed; left: 0; right: 0; bottom: 0; padding: .45rem 1rem calc(.45rem + env(safe-area-inset-bottom, 0px)); background: #fff4d6; color: #6b4e00; font-size: .85rem; text-align: center; z-index: 6; }
 
 /* Topo */
-.topbar { display: flex; justify-content: center; align-items: center; height: var(--topbar-h); padding-inline: 1rem; background: var(--accent-soft); border-bottom: 1px solid color-mix(in srgb, var(--accent) 15%, transparent); }
-.wordmark { color: var(--accent); font-weight: 700; font-size: 1.05rem; letter-spacing: .14em; text-transform: uppercase; text-align: center; }
+.topbar { display: flex; justify-content: center; align-items: center; gap: clamp(.75rem, 3.5vw, 2rem); height: var(--topbar-h); padding-inline: 1rem; background: var(--accent-soft); border-bottom: 1px solid color-mix(in srgb, var(--accent) 15%, transparent); }
+.topbar img { display: block; width: auto; min-width: 0; }
+.tb-nt { height: 2.7rem; }
+.tb-festival { height: 4.4rem; }
+.tb-equatorial { height: 2.1rem; }
+.tb-sep { flex: none; width: 1px; height: 3rem; background: color-mix(in srgb, var(--accent) 30%, transparent); }
+@media (max-width: 30rem) { .tb-nt { height: 2rem; } .tb-festival { height: 3.3rem; } .tb-equatorial { height: 1.45rem; } .tb-sep { height: 2.4rem; } }
 
 /* Celular: tipografia um pouco menor no geral.
    Campos ficam com no mínimo 16px para o iPhone não dar zoom ao tocar. */
@@ -162,7 +167,6 @@ button:focus-visible, .opt:focus-visible, .check:has(input:focus-visible) { outl
   .opt { font-size: 1rem; }
   .btn.big-btn { font-size: 1.08rem; }
   .hours strong { font-size: 1.6rem; }
-  .wordmark { font-size: .92rem; letter-spacing: .1em; }
   input, select, textarea { font-size: max(16px, 1rem); }
 }
 
@@ -174,7 +178,11 @@ button:focus-visible, .opt:focus-visible, .check:has(input:focus-visible) { outl
 <div class="progress" aria-hidden="true"><i id="bar"></i></div>
 
 <header class="topbar">
-  <span class="wordmark">Oficina de Produção</span>
+  <img class="tb-nt" src="logo-nt-education.svg" alt="NT Education" width="351" height="99">
+  <span class="tb-sep" aria-hidden="true"></span>
+  <img class="tb-festival" src="logo-festival.svg" alt="Festival de Natal" width="351" height="194">
+  <span class="tb-sep" aria-hidden="true"></span>
+  <img class="tb-equatorial" src="logo-equatorial.svg" alt="Equatorial Energia" width="280" height="74">
 </header>
 
 <form id="form" class="stage" novalidate autocomplete="on">
