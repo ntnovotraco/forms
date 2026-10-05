@@ -75,7 +75,7 @@ function doPost(e) {
 function doGet() {
   const sh = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(ABAS.inscricoes.nome);
   const inscritos = sh ? Math.max(0, sh.getLastRow() - 1) : 0;
-  return json({ ok: true, status: "Formulário Oficina de Produção no ar", inscritos, vagas: VAGAS });
+  return json({ ok: true, status: "Formulário Oficina de Produção no ar", inscritos });
 }
 
 function aba(def) {

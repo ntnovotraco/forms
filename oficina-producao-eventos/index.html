@@ -4,16 +4,25 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Inscrição · Oficina de Produção de Eventos</title>
-<meta name="description" content="Oficina presencial de Produção de Eventos no Auditório da Praça Maria Aragão, em São Luís. 09 e 10/12, das 14h às 18h. Apenas 20 vagas, por ordem de inscrição. Certificado de 8h/aula de estágio.">
+<meta name="description" content="Oficina presencial de Produção de Eventos no Auditório da Praça Maria Aragão, em São Luís. 09 e 10/12, das 14h às 18h. Vagas limitadas, por ordem de inscrição. Certificado de 8h/aula de estágio.">
 <meta name="theme-color" content="#003E91">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
 <meta property="og:url" content="https://forms.novotraco.com/oficina-producao-eventos/">
 <meta property="og:title" content="Oficina de Produção de Eventos · Inscrições">
-<meta property="og:description" content="09 e 10/12, das 14h às 18h, no Auditório da Praça Maria Aragão · Apenas 20 vagas · Certificado de 8h/aula de estágio e 2 vagas na equipe de produção do evento.">
-<meta name="twitter:card" content="summary">
+<meta property="og:site_name" content="Festival de Natal Equatorial">
+<meta property="og:description" content="09 e 10/12, das 14h às 18h, no Auditório da Praça Maria Aragão · Vagas limitadas · Certificado de 8h/aula de estágio e 2 vagas na equipe de produção do evento.">
+<meta property="og:image" content="https://forms.novotraco.com/oficina-producao-eventos/og-image.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Oficina de Produção de Eventos 2026 · Festival de Natal, NT Education e Equatorial Energia">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Oficina de Produção de Eventos · Inscrições">
-<meta name="twitter:description" content="09 e 10/12, das 14h às 18h · Apenas 20 vagas · Certificado de 8h/aula de estágio.">
+<meta name="twitter:description" content="09 e 10/12, das 14h às 18h · Vagas limitadas · Certificado de 8h/aula de estágio.">
+<meta name="twitter:image" content="https://forms.novotraco.com/oficina-producao-eventos/og-image.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap">
@@ -196,7 +205,7 @@ button:focus-visible, .opt:focus-visible, .check:has(input:focus-visible) { outl
       <div><dt>Datas</dt><dd>09 e 10/12 (qua e qui)</dd></div>
       <div><dt>Horário</dt><dd>14h às 18h</dd></div>
       <div><dt>Local</dt><dd>Auditório da Praça Maria Aragão</dd></div>
-      <div><dt>Vagas</dt><dd>Apenas 20, por ordem de inscrição<span class="left" id="vagasLeft" hidden></span></dd></div>
+      <div><dt>Vagas</dt><dd>Limitadas, por ordem de inscrição<span class="left" id="vagasLeft" hidden></span></dd></div>
     </dl>
 
     <div class="bonus">
@@ -221,7 +230,7 @@ button:focus-visible, .opt:focus-visible, .check:has(input:focus-visible) { outl
     <h2 class="rules-title">Como funciona</h2>
     <ul class="rules">
       <li>Inscrições de <strong>16/11 a 04/12</strong>, ou até as vagas acabarem.</li>
-      <li>São <strong>apenas 20 vagas</strong>, preenchidas pela ordem de envio do formulário. O formulário fecha sozinho quando a 20ª inscrição chega.</li>
+      <li>As <strong>vagas são limitadas</strong> e preenchidas pela ordem de envio do formulário. O formulário fecha sozinho quando as vagas acabam.</li>
       <li>A oficina é <strong>presencial</strong>, nos dias <strong>09 e 10/12, das 14h às 18h</strong>, no Auditório da Praça Maria Aragão.</li>
       <li>Para receber o <strong>certificado de 8h/aula de estágio</strong>, é preciso estar presente nos dois dias.</li>
       <li>Ao longo da oficina, a organização escolhe <strong>2 participantes</strong> para trabalhar na montagem e no evento, como parte da equipe de produção. Eles ganham <strong>mais 24h/aula</strong> (3 dias de 8h).</li>
@@ -346,7 +355,7 @@ button:focus-visible, .opt:focus-visible, .check:has(input:focus-visible) { outl
         <div class="checks">
           <label class="check"><input type="checkbox" name="aceite" id="ac-presenca" value="presenca"><span>Vou estar presente nos dois dias, 09 e 10/12, das 14h às 18h.</span></label>
           <label class="check"><input type="checkbox" name="aceite" id="ac-certificado" value="certificado"><span>Sei que o certificado só é emitido para quem participar dos dois dias.</span></label>
-          <label class="check"><input type="checkbox" name="aceite" id="ac-ordem" value="ordem"><span>Sei que as 20 vagas seguem a ordem de inscrição e que a confirmação chega por WhatsApp ou e-mail.</span></label>
+          <label class="check"><input type="checkbox" name="aceite" id="ac-ordem" value="ordem"><span>Sei que as vagas seguem a ordem de inscrição e que a confirmação chega por WhatsApp ou e-mail.</span></label>
           <label class="check"><input type="checkbox" name="aceite" id="ac-dados" value="dados"><span>Autorizo o uso dos meus dados para a organização da oficina e a emissão do certificado.</span></label>
         </div>
         <span class="error"></span>
@@ -374,6 +383,7 @@ button:focus-visible, .opt:focus-visible, .check:has(input:focus-visible) { outl
 const ENDPOINT = "";
 const DRAFT_KEY = "oficina-producao-eventos-v1";
 const VAGAS = 20;
+const ULTIMAS = 5; // a partir de quantas vagas restantes aparece "Últimas vagas!"
 // Horário de São Luís (UTC−3). Precisam bater com o apps-script.gs.
 const ABERTURA = new Date("2026-11-16T00:00:00-03:00");
 const ENCERRAMENTO = new Date("2026-12-04T23:59:59-03:00");
@@ -405,7 +415,7 @@ function renderSituacao() {
   const msgs = {
     antes: "As inscrições abrem em 16/11. Volte aqui nesse dia!",
     encerrado: "As inscrições foram encerradas em 04/12.",
-    esgotado: "As 20 vagas já foram preenchidas. Obrigado pelo interesse!"
+    esgotado: "As vagas já foram preenchidas. Obrigado pelo interesse!"
   };
   st.hidden = s === "aberto";
   st.textContent = msgs[s] || "";
@@ -413,9 +423,9 @@ function renderSituacao() {
   $("#startActions").hidden = s !== "aberto";
   const left = $("#vagasLeft");
   if (inscritos !== null && s === "aberto" && !TESTE) {
-    const r = Math.max(0, VAGAS - inscritos);
-    left.textContent = r === 1 ? "Resta 1 vaga!" : `Restam ${r} vagas`;
-    left.hidden = false;
+    // O total de vagas não aparece na página; só avisa quando estão acabando
+    left.textContent = "Últimas vagas!";
+    left.hidden = VAGAS - inscritos > ULTIMAS;
   } else left.hidden = true;
   // Se as vagas acabaram enquanto a pessoa preenchia, volta para a abertura com o aviso
   if (s !== "aberto" && screenId !== "inicio" && screenId !== "fim") show("inicio");
