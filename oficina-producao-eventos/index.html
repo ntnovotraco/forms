@@ -224,7 +224,7 @@ button:focus-visible, .opt:focus-visible, .check:has(input:focus-visible) { outl
     <h2 class="rules-title">Como funciona</h2>
     <ul class="rules">
       <li>Inscrições de <strong>16/11 a 04/12</strong>, ou até as vagas acabarem.</li>
-      <li>As <strong>vagas são limitadas</strong> e preenchidas pela ordem de envio do formulário. Depois que as vagas acabam, as novas inscrições entram numa lista de espera.</li>
+      <li>As <strong>vagas são limitadas</strong> e preenchidas pela ordem de envio do formulário. Depois que as vagas acabam, as novas inscrições entram numa fila de espera.</li>
       <li>A oficina é <strong>presencial</strong>, nos dias <strong>09 e 10/12, das 14h às 18h</strong>, no Auditório da Praça Maria Aragão.</li>
       <li>Para receber o <strong>certificado de 8h/aula de estágio</strong>, é preciso estar presente nos dois dias.</li>
       <li>Ao longo da oficina, a organização escolhe <strong>2 participantes</strong> para trabalhar na montagem e no evento, como parte da equipe de produção. Eles ganham <strong>mais 24h/aula</strong> (3 dias de 8h).</li>
@@ -408,7 +408,7 @@ const ULTIMAS = 5; // a partir de quantas vagas restantes aparece "Últimas vaga
 const ABERTURA = new Date("2026-11-16T00:00:00-03:00");
 const ENCERRAMENTO = new Date("2026-12-04T23:59:59-03:00");
 // Abra a página com ?teste no fim do endereço para testar fora do prazo. Esses envios vão para a aba "Testes".
-// Com ?teste=espera, o envio de teste mostra a mensagem de lista de espera.
+// Com ?teste=espera, o envio de teste mostra a mensagem de fila de espera.
 const TESTE = new URLSearchParams(location.search).has("teste");
 const TESTE_ESPERA = new URLSearchParams(location.search).get("teste") === "espera";
 
@@ -451,7 +451,7 @@ function renderSituacao() {
   const left = $("#vagasLeft");
   if (inscritos !== null && s === "aberto" && !TESTE) {
     // O total de vagas não aparece na página; só avisa quando estão acabando.
-    // Com as vagas esgotadas o formulário segue aberto e as inscrições vão para a lista de espera.
+    // Com as vagas esgotadas o formulário segue aberto e as inscrições vão para a fila de espera.
     const restam = VAGAS - inscritos;
     left.textContent = "Últimas vagas!";
     left.hidden = restam > ULTIMAS || restam <= 0;
@@ -629,11 +629,12 @@ function concluir(dados, res) {
   const primeiro = dados.nome.split(/\s+/)[0];
   $("#doneTitle").textContent = `Obrigado, ${primeiro}!`;
   if (res.espera) {
-    $("#doneEyebrow").textContent = "Lista de espera";
-    $("#doneTitle").textContent = "Inscrição recebida";
-    $("#doneText").textContent = res.jaInscrito
-      ? "Encontramos uma inscrição com o seu e-mail ou matrícula na lista de espera. Não é preciso enviar de novo. Caso algum participante desista, entraremos em contato via WhatsApp e e-mail. Obrigado!"
-      : "Recebemos sua inscrição, mas as vagas já se esgotaram. Caso algum participante desista, entraremos em contato via WhatsApp e e-mail. Obrigado!";
+    $("#doneEyebrow").textContent = "Inscrição recebida";
+    $("#doneTitle").textContent = "Você está na fila de espera";
+    $("#doneText").textContent = (res.jaInscrito
+      ? "Você já tinha se inscrito e continua na fila de espera, não é preciso enviar de novo."
+      : "Recebemos sua inscrição, mas as vagas já se esgotaram.")
+      + " Caso algum dos inscritos não possa participar, entraremos em contato via WhatsApp e e-mail. Obrigado!";
   } else if (res.jaInscrito) {
     $("#doneEyebrow").textContent = "Você já estava inscrito(a)";
     $("#doneText").textContent = "Encontramos uma inscrição com o seu e-mail ou matrícula, então a sua vaga continua garantida. Não é preciso enviar de novo.";
@@ -684,7 +685,7 @@ form.addEventListener("submit", async e => {
 if (TESTE) {
   const t = document.createElement("div");
   t.className = "test-banner";
-  t.textContent = TESTE_ESPERA ? "Modo de teste (lista de espera): o envio vai para a aba Testes e mostra a mensagem de vagas esgotadas." : "Modo de teste: as inscrições enviadas aqui vão para a aba Testes e não ocupam vaga.";
+  t.textContent = TESTE_ESPERA ? "Modo de teste (fila de espera): o envio vai para a aba Testes e mostra a mensagem de vagas esgotadas." : "Modo de teste: as inscrições enviadas aqui vão para a aba Testes e não ocupam vaga.";
   document.body.append(t);
 }
 loadDraft();

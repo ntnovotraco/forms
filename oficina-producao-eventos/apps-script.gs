@@ -4,15 +4,15 @@
  *
  * Abas criadas automaticamente:
  *   Inscrições – uma linha por participante, na ordem de chegada (no máximo 20)
- *   Lista de espera – inscrições que chegam depois das 20 vagas preenchidas
+ *   Fila de espera – inscrições que chegam depois das 20 vagas preenchidas
  *   Testes     – envios feitos pela página aberta com ?teste (não ocupam vaga)
  *
  * As três últimas colunas da aba Inscrições ficam em branco para a organização
  * preencher: presença em cada dia e quem foi escolhido para a equipe de produção.
  *
  * Desistência: apague a linha da pessoa em Inscrições, copie a primeira pessoa da
- * Lista de espera para Inscrições e apague a linha dela na Lista de espera.
- * Enquanto houver alguém na Lista de espera, as inscrições novas vão para o fim da fila.
+ * Fila de espera para Inscrições e apague a linha dela na Fila de espera.
+ * Enquanto houver alguém na Fila de espera, as inscrições novas vão para o fim da fila.
  */
 
 const VAGAS = 20;
@@ -29,7 +29,7 @@ const COLUNAS = [
 ];
 const ABAS = {
   inscricoes: { nome: "Inscrições", colunas: COLUNAS },
-  espera: { nome: "Lista de espera", colunas: COLUNAS },
+  espera: { nome: "Fila de espera", colunas: COLUNAS },
   testes: { nome: "Testes", colunas: COLUNAS }
 };
 // Posição (base 0) das colunas usadas para achar inscrição repetida
@@ -61,8 +61,8 @@ function doPost(e) {
     const repetidaEspera = espera.find(igual);
     if (repetidaEspera) return json({ ok: true, protocolo: repetidaEspera[COL_PROTOCOLO], jaInscrito: true, espera: true });
 
-    // Vagas esgotadas (ou já existe fila): vai para a lista de espera.
-    // Se alguém desistir, a organização apaga a linha em Inscrições e chama a próxima pessoa da Lista de espera.
+    // Vagas esgotadas (ou já existe fila): vai para a fila de espera.
+    // Se alguém desistir, a organização apaga a linha em Inscrições e chama a próxima pessoa da Fila de espera.
     const vaiParaEspera = teste ? d.teste === "espera" || false : (inscritos.length >= VAGAS || espera.length > 0);
     const sh = vaiParaEspera && !teste ? shEspera : shInscricoes;
     const linhas = vaiParaEspera && !teste ? espera : inscritos;
