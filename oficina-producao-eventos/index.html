@@ -200,7 +200,7 @@ button:focus-visible, .opt:focus-visible, .check:has(input:focus-visible) { outl
   <section class="screen welcome" data-id="inicio">
     <p class="eyebrow">Oficina presencial · São Luís – MA</p>
     <h1>Oficina de Produção de Eventos</h1>
-    <p class="lead">Dois encontros presenciais para alunos que querem aprender como um evento é produzido, com certificado de horas de estágio.</p>
+    <p class="lead">Dois encontros presenciais para quem quer aprender como um evento é produzido, com certificado de horas de estágio.</p>
     <dl class="facts">
       <div><dt>Datas</dt><dd>09 e 10/12 (qua e qui)</dd></div>
       <div><dt>Horário</dt><dd>14h às 18h</dd></div>
@@ -278,7 +278,21 @@ button:focus-visible, .opt:focus-visible, .check:has(input:focus-visible) { outl
       </div>
     </div>
 
-    <div class="qblock" data-q="curso">
+    <h3 class="group-title">Formação</h3>
+
+    <div class="qblock" data-q="superior" data-choice>
+      <div class="q"><span class="q-num"></span><h2>Você faz algum curso superior?<span class="req">*</span></h2></div>
+      <div class="indent">
+        <div class="options" role="radiogroup" aria-label="Faz curso superior">
+          <button type="button" class="opt" role="radio" aria-checked="false" data-value="Sim"><kbd>A</kbd>Sim<span class="tick">✓</span></button>
+          <button type="button" class="opt" role="radio" aria-checked="false" data-value="Não"><kbd>B</kbd>Não<span class="tick">✓</span></button>
+        </div>
+        <input type="hidden" name="superior" id="superior">
+        <span class="error"></span>
+      </div>
+    </div>
+
+    <div class="qblock" data-q="curso" data-if="superior=Sim" hidden>
       <div class="q"><span class="q-num"></span><h2><label for="curso">Qual é o seu curso?<span class="req">*</span></label></h2></div>
       <div class="indent">
         <input class="big" type="text" id="curso" name="curso" placeholder="Ex.: Publicidade e Propaganda">
@@ -286,7 +300,7 @@ button:focus-visible, .opt:focus-visible, .check:has(input:focus-visible) { outl
       </div>
     </div>
 
-    <div class="qblock" data-q="periodo">
+    <div class="qblock" data-q="periodo" data-if="superior=Sim" hidden>
       <div class="q"><span class="q-num"></span><h2><label for="periodo">Em que período você está?<span class="req">*</span></label></h2></div>
       <div class="indent">
         <input class="big" type="text" id="periodo" name="periodo" placeholder="Ex.: 5º período">
@@ -294,10 +308,30 @@ button:focus-visible, .opt:focus-visible, .check:has(input:focus-visible) { outl
       </div>
     </div>
 
-    <div class="qblock" data-q="matricula">
-      <div class="q"><span class="q-num"></span><h2><label for="matricula">Número de matrícula<span class="req">*</span></label></h2></div>
+    <div class="qblock" data-q="uniasselvi" data-choice data-if="superior=Sim" hidden>
+      <div class="q"><span class="q-num"></span><h2>O seu curso é na Uniasselvi?<span class="req">*</span></h2></div>
+      <div class="indent">
+        <div class="options" role="radiogroup" aria-label="Curso na Uniasselvi">
+          <button type="button" class="opt" role="radio" aria-checked="false" data-value="Sim"><kbd>A</kbd>Sim<span class="tick">✓</span></button>
+          <button type="button" class="opt" role="radio" aria-checked="false" data-value="Não"><kbd>B</kbd>Não<span class="tick">✓</span></button>
+        </div>
+        <input type="hidden" name="uniasselvi" id="uniasselvi">
+        <span class="error"></span>
+      </div>
+    </div>
+
+    <div class="qblock" data-q="matricula" data-if="superior=Sim&amp;uniasselvi=Sim" hidden>
+      <div class="q"><span class="q-num"></span><h2><label for="matricula">Qual é o seu número de matrícula na Uniasselvi?<span class="req">*</span></label></h2></div>
       <div class="indent">
         <input class="big" type="text" id="matricula" name="matricula" placeholder="Digite aqui…">
+        <span class="error"></span>
+      </div>
+    </div>
+
+    <div class="qblock" data-q="instituicao" data-if="superior=Sim&amp;uniasselvi=Não" hidden>
+      <div class="q"><span class="q-num"></span><h2><label for="instituicao">Em qual instituição você estuda?<span class="req">*</span></label></h2></div>
+      <div class="indent">
+        <input class="big" type="text" id="instituicao" name="instituicao" placeholder="Digite aqui…">
         <span class="error"></span>
       </div>
     </div>
@@ -397,8 +431,15 @@ const screens = $$(".screen");
 const blocks = $$(".qblock");
 let screenId = "inicio";
 
-// Numeração das perguntas
-blocks.forEach((b, i) => { $(".q-num", b).textContent = i + 1; });
+// Perguntas que só aparecem conforme respostas anteriores (data-if="campo=valor&campo=valor")
+const visivel = b => !b.hidden;
+function condicionais() {
+  $$("[data-if]").forEach(b => {
+    b.hidden = !b.dataset.if.split("&").every(c => { const [k, v] = c.split("="); return form.elements[k].value === v; });
+  });
+  // Numeração só das perguntas visíveis
+  blocks.filter(visivel).forEach((b, i) => { $(".q-num", b).textContent = i + 1; });
+}
 
 /* ---------- Situação das inscrições ---------- */
 let inscritos = null;
@@ -453,7 +494,7 @@ function choose(block, btn) {
   $$(".opt", block).forEach(o => o.setAttribute("aria-checked", String(o === btn)));
   $('input[type="hidden"]', block).value = btn.dataset.value;
   $(".error", block).textContent = "";
-  saveDraft(); updateProgress();
+  condicionais(); saveDraft(); updateProgress();
 }
 $$("[data-choice]").forEach(b => $$(".opt", b).forEach(o => o.addEventListener("click", () => choose(b, o))));
 
@@ -471,16 +512,19 @@ const checks = {
   nome: () => $("#nome").value.trim().split(/\s+/).length >= 2 || "Informe o nome completo (nome e sobrenome).",
   email: () => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test($("#email").value.trim()) || "Informe um e-mail válido.",
   telefone: () => $("#telefone").value.replace(/\D/g, "").length >= 10 || "Informe o WhatsApp com DDD.",
+  superior: () => filled($("#superior")) || "Escolha uma opção.",
   curso: () => filled($("#curso")) || "Informe o seu curso.",
   periodo: () => filled($("#periodo")) || "Informe o período.",
+  uniasselvi: () => filled($("#uniasselvi")) || "Escolha uma opção.",
   matricula: () => filled($("#matricula")) || "Informe o número de matrícula.",
+  instituicao: () => filled($("#instituicao")) || "Informe a instituição.",
   experiencia: () => filled($("#experiencia")) || "Escolha uma opção.",
   disponivelEquipe: () => filled($("#disponivelEquipe")) || "Escolha uma opção.",
   motivo: () => filled($("#motivo")) || "Conte em poucas palavras por que quer participar.",
   termo: () => $$('[name="aceite"]').every(c => c.checked) || "Marque todos os itens para enviar."
 };
 function validateBlock(b, show = true) {
-  const fn = checks[b.dataset.q]; if (!fn) return true;
+  const fn = checks[b.dataset.q]; if (!fn || !visivel(b)) return true;
   const r = fn(), err = $(".error", b);
   if (show && err) err.textContent = r === true ? "" : "⚠ " + r;
   if (show) $$(".big", b).forEach(i => i.classList.toggle("bad", r !== true));
@@ -492,8 +536,8 @@ const required = blocks.filter(b => checks[b.dataset.q]);
 function updateProgress() {
   if (screenId === "fim") { $("#bar").style.width = "100%"; return; }
   if (screenId !== "perguntas") { $("#bar").style.width = screenId === "regras" ? "4%" : "0"; return; }
-  const done = required.filter(b => checks[b.dataset.q]() === true).length;
-  $("#bar").style.width = (4 + (done / required.length) * 96) + "%";
+  const req = required.filter(visivel), done = req.filter(b => checks[b.dataset.q]() === true).length;
+  $("#bar").style.width = (4 + (done / req.length) * 96) + "%";
 }
 
 /* ---------- Telas ---------- */
@@ -514,7 +558,7 @@ function show(id) {
 $$("[data-go]").forEach(b => b.addEventListener("click", () => show(b.dataset.go)));
 
 // Enter: nas telas de abertura/regras avança; na página de perguntas pula para o próximo campo
-const fieldOrder = () => $$('[data-id="perguntas"] input:not([type="hidden"]):not([type="checkbox"]), [data-id="perguntas"] textarea');
+const fieldOrder = () => $$('[data-id="perguntas"] input:not([type="hidden"]):not([type="checkbox"]), [data-id="perguntas"] textarea').filter(el => !el.closest("[hidden]"));
 document.addEventListener("keydown", e => {
   if (e.key !== "Enter") return;
   const t = e.target;
@@ -560,6 +604,8 @@ form.addEventListener("focusout", e => {
 function collect() {
   const f = new FormData(form), d = {};
   for (const [k, v] of f.entries()) if (k !== "aceite") d[k] = String(v).trim();
+  // Respostas de perguntas escondidas não são enviadas
+  $$("[data-if]").filter(b => b.hidden).forEach(b => $$("input, textarea", b).forEach(el => { if (el.name) d[el.name] = ""; }));
   d.aceites = f.getAll("aceite");
   return d;
 }
@@ -582,6 +628,7 @@ function loadDraft() {
     $$(".opt", b).forEach(o => o.setAttribute("aria-checked", String(!!v && o.dataset.value === v)));
   });
   $$('[name="aceite"]').forEach(c => c.checked = (d.aceites || []).includes(c.value));
+  condicionais();
   renderSituacao();
   show(["regras", "perguntas"].includes(d._tela) ? d._tela : "inicio");
   requestAnimationFrame(() => $$("textarea.grow").forEach(t => { if (t.value) grow(t); }));

@@ -3,7 +3,7 @@
  * e grava na planilha onde este script está instalado.
  *
  * Abas criadas automaticamente:
- *   Inscrições – uma linha por aluno, na ordem de chegada (no máximo 20)
+ *   Inscrições – uma linha por participante, na ordem de chegada (no máximo 20)
  *   Testes     – envios feitos pela página aberta com ?teste (não ocupam vaga)
  *
  * As três últimas colunas da aba Inscrições ficam em branco para a organização
@@ -18,7 +18,7 @@ const TOTAL_ACEITES = 4;
 
 const COLUNAS = [
   "Ordem", "Protocolo", "Enviado em", "Nome completo", "E-mail", "WhatsApp",
-  "Curso", "Período", "Matrícula", "Experiência com eventos", "Experiência (detalhes)",
+  "Faz curso superior", "Curso", "Período", "Na Uniasselvi", "Instituição", "Matrícula", "Experiência com eventos", "Experiência (detalhes)",
   "Disponível p/ equipe de produção", "Por que quer participar", "Termo aceito",
   "Presente 09/12", "Presente 10/12", "Escolhido(a) p/ equipe"
 ];
@@ -27,7 +27,7 @@ const ABAS = {
   testes: { nome: "Testes", colunas: COLUNAS }
 };
 // Posição (base 0) das colunas usadas para achar inscrição repetida
-const COL_PROTOCOLO = 1, COL_EMAIL = 4, COL_MATRICULA = 8;
+const COL_PROTOCOLO = 1, COL_EMAIL = 4, COL_MATRICULA = 11;
 
 function doPost(e) {
   const lock = LockService.getScriptLock();
@@ -56,7 +56,7 @@ function doPost(e) {
 
     sh.appendRow([
       linhas.length + 1, protocolo, enviadoEm, d.nome, d.email, d.telefone,
-      d.curso, d.periodo, d.matricula, d.experiencia, d.experienciaDetalhe,
+      d.superior, d.curso, d.periodo, d.uniasselvi, d.instituicao, d.matricula, d.experiencia, d.experienciaDetalhe,
       d.disponivelEquipe, d.motivo,
       (d.aceites || []).length >= TOTAL_ACEITES ? "Sim" : "Incompleto",
       "", "", ""
