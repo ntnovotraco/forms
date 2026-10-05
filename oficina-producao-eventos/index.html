@@ -372,14 +372,6 @@ button:focus-visible, .opt:focus-visible, .check:has(input:focus-visible) { outl
       </div>
     </div>
 
-    <div class="qblock" data-q="motivo">
-      <div class="q"><span class="q-num"></span><h2><label for="motivo">Por que você quer participar da oficina?<span class="req">*</span></label></h2></div>
-      <div class="indent">
-        <textarea class="big grow" id="motivo" name="motivo" rows="1" placeholder="Digite aqui…"></textarea>
-        <span class="error"></span>
-      </div>
-    </div>
-
     <h3 class="group-title">Confirmação</h3>
 
     <div class="qblock" data-q="termo">
@@ -520,7 +512,6 @@ const checks = {
   instituicao: () => filled($("#instituicao")) || "Informe a instituição.",
   experiencia: () => filled($("#experiencia")) || "Escolha uma opção.",
   disponivelEquipe: () => filled($("#disponivelEquipe")) || "Escolha uma opção.",
-  motivo: () => filled($("#motivo")) || "Conte em poucas palavras por que quer participar.",
   termo: () => $$('[name="aceite"]').every(c => c.checked) || "Marque todos os itens para enviar."
 };
 function validateBlock(b, show = true) {

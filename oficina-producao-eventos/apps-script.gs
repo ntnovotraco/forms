@@ -19,7 +19,7 @@ const TOTAL_ACEITES = 4;
 const COLUNAS = [
   "Ordem", "Protocolo", "Enviado em", "Nome completo", "E-mail", "WhatsApp",
   "Faz curso superior", "Curso", "Período", "Na Uniasselvi", "Instituição", "Matrícula", "Experiência com eventos", "Experiência (detalhes)",
-  "Disponível p/ equipe de produção", "Por que quer participar", "Termo aceito",
+  "Disponível p/ equipe de produção", "Termo aceito",
   "Presente 09/12", "Presente 10/12", "Escolhido(a) p/ equipe"
 ];
 const ABAS = {
@@ -57,7 +57,7 @@ function doPost(e) {
     sh.appendRow([
       linhas.length + 1, protocolo, enviadoEm, d.nome, d.email, d.telefone,
       d.superior, d.curso, d.periodo, d.uniasselvi, d.instituicao, d.matricula, d.experiencia, d.experienciaDetalhe,
-      d.disponivelEquipe, d.motivo,
+      d.disponivelEquipe,
       (d.aceites || []).length >= TOTAL_ACEITES ? "Sim" : "Incompleto",
       "", "", ""
     ].map(seguro));
