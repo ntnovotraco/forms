@@ -224,7 +224,7 @@ button:focus-visible, .opt:focus-visible, .check:has(input:focus-visible) { outl
     <h2 class="rules-title">Como funciona</h2>
     <ul class="rules">
       <li>Inscrições de <strong>16/11 a 04/12</strong>, ou até as vagas acabarem.</li>
-      <li>As <strong>vagas são limitadas</strong> e preenchidas pela ordem de envio do formulário. O formulário fecha sozinho quando as vagas acabam.</li>
+      <li>As <strong>vagas são limitadas</strong> e preenchidas pela ordem de envio do formulário. Depois que as vagas acabam, as novas inscrições entram numa lista de espera.</li>
       <li>A oficina é <strong>presencial</strong>, nos dias <strong>09 e 10/12, das 14h às 18h</strong>, no Auditório da Praça Maria Aragão.</li>
       <li>Para receber o <strong>certificado de 8h/aula de estágio</strong>, é preciso estar presente nos dois dias.</li>
       <li>Ao longo da oficina, a organização escolhe <strong>2 participantes</strong> para trabalhar na montagem e no evento, como parte da equipe de produção. Eles ganham <strong>mais 24h/aula</strong> (3 dias de 8h).</li>
@@ -408,7 +408,9 @@ const ULTIMAS = 5; // a partir de quantas vagas restantes aparece "Últimas vaga
 const ABERTURA = new Date("2026-11-16T00:00:00-03:00");
 const ENCERRAMENTO = new Date("2026-12-04T23:59:59-03:00");
 // Abra a página com ?teste no fim do endereço para testar fora do prazo. Esses envios vão para a aba "Testes".
+// Com ?teste=espera, o envio de teste mostra a mensagem de lista de espera.
 const TESTE = new URLSearchParams(location.search).has("teste");
+const TESTE_ESPERA = new URLSearchParams(location.search).get("teste") === "espera";
 
 const $ = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];
@@ -434,27 +436,27 @@ function situacao() {
   const agora = new Date();
   if (agora < ABERTURA) return "antes";
   if (agora > ENCERRAMENTO) return "encerrado";
-  if (inscritos !== null && inscritos >= VAGAS) return "esgotado";
   return "aberto";
 }
 function renderSituacao() {
   const s = situacao(), st = $("#status");
   const msgs = {
     antes: "As inscrições abrem em 16/11. Volte aqui nesse dia!",
-    encerrado: "As inscrições foram encerradas em 04/12.",
-    esgotado: "As vagas já foram preenchidas. Obrigado pelo interesse!"
+    encerrado: "As inscrições foram encerradas em 04/12."
   };
   st.hidden = s === "aberto";
   st.textContent = msgs[s] || "";
-  st.classList.toggle("closed", s === "encerrado" || s === "esgotado");
+  st.classList.toggle("closed", s === "encerrado");
   $("#startActions").hidden = s !== "aberto";
   const left = $("#vagasLeft");
   if (inscritos !== null && s === "aberto" && !TESTE) {
-    // O total de vagas não aparece na página; só avisa quando estão acabando
+    // O total de vagas não aparece na página; só avisa quando estão acabando.
+    // Com as vagas esgotadas o formulário segue aberto e as inscrições vão para a lista de espera.
+    const restam = VAGAS - inscritos;
     left.textContent = "Últimas vagas!";
-    left.hidden = VAGAS - inscritos > ULTIMAS;
+    left.hidden = restam > ULTIMAS || restam <= 0;
   } else left.hidden = true;
-  // Se as vagas acabaram enquanto a pessoa preenchia, volta para a abertura com o aviso
+  // Se as inscrições encerraram enquanto a pessoa preenchia, volta para a abertura com o aviso
   if (s !== "aberto" && screenId !== "inicio" && screenId !== "fim") show("inicio");
 }
 async function carregarVagas() {
@@ -626,7 +628,13 @@ function concluir(dados, res) {
   try { localStorage.removeItem(DRAFT_KEY); } catch (x) {}
   const primeiro = dados.nome.split(/\s+/)[0];
   $("#doneTitle").textContent = `Obrigado, ${primeiro}!`;
-  if (res.jaInscrito) {
+  if (res.espera) {
+    $("#doneEyebrow").textContent = "Lista de espera";
+    $("#doneTitle").textContent = "Inscrição recebida";
+    $("#doneText").textContent = res.jaInscrito
+      ? "Encontramos uma inscrição com o seu e-mail ou matrícula na lista de espera. Não é preciso enviar de novo. Caso algum participante desista, entraremos em contato via WhatsApp e e-mail. Obrigado!"
+      : "Recebemos sua inscrição, mas as vagas já se esgotaram. Caso algum participante desista, entraremos em contato via WhatsApp e e-mail. Obrigado!";
+  } else if (res.jaInscrito) {
     $("#doneEyebrow").textContent = "Você já estava inscrito(a)";
     $("#doneText").textContent = "Encontramos uma inscrição com o seu e-mail ou matrícula, então a sua vaga continua garantida. Não é preciso enviar de novo.";
   }
@@ -653,14 +661,13 @@ form.addEventListener("submit", async e => {
   err.textContent = "";
   const btn = $("#submitBtn");
   btn.disabled = true; btn.textContent = "Enviando…";
-  const dados = { ...collect(), teste: TESTE };
+  const dados = { ...collect(), teste: TESTE_ESPERA ? "espera" : TESTE };
   try {
-    let res = { ok: true, protocolo: "" };
+    let res = { ok: true, protocolo: "", espera: TESTE_ESPERA };
     if (ENDPOINT) {
       // text/plain evita a checagem de CORS que o Apps Script não responde
       const r = await fetch(ENDPOINT, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(dados) });
       res = await r.json().catch(() => ({}));
-      if (res.motivo === "esgotado") { inscritos = VAGAS; renderSituacao(); return; }
       if (res.motivo === "fora_do_prazo") { renderSituacao(); err.textContent = "⚠ As inscrições não estão abertas agora (período: 16/11 a 04/12)."; return; }
       if (!r.ok || !res.ok) throw new Error(res.erro || "HTTP " + r.status);
     } else {
@@ -677,7 +684,7 @@ form.addEventListener("submit", async e => {
 if (TESTE) {
   const t = document.createElement("div");
   t.className = "test-banner";
-  t.textContent = "Modo de teste: as inscrições enviadas aqui vão para a aba Testes e não ocupam vaga.";
+  t.textContent = TESTE_ESPERA ? "Modo de teste (lista de espera): o envio vai para a aba Testes e mostra a mensagem de vagas esgotadas." : "Modo de teste: as inscrições enviadas aqui vão para a aba Testes e não ocupam vaga.";
   document.body.append(t);
 }
 loadDraft();

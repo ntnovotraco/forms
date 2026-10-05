@@ -4,10 +4,15 @@
  *
  * Abas criadas automaticamente:
  *   Inscrições – uma linha por participante, na ordem de chegada (no máximo 20)
+ *   Lista de espera – inscrições que chegam depois das 20 vagas preenchidas
  *   Testes     – envios feitos pela página aberta com ?teste (não ocupam vaga)
  *
  * As três últimas colunas da aba Inscrições ficam em branco para a organização
  * preencher: presença em cada dia e quem foi escolhido para a equipe de produção.
+ *
+ * Desistência: apague a linha da pessoa em Inscrições, copie a primeira pessoa da
+ * Lista de espera para Inscrições e apague a linha dela na Lista de espera.
+ * Enquanto houver alguém na Lista de espera, as inscrições novas vão para o fim da fila.
  */
 
 const VAGAS = 20;
@@ -24,6 +29,7 @@ const COLUNAS = [
 ];
 const ABAS = {
   inscricoes: { nome: "Inscrições", colunas: COLUNAS },
+  espera: { nome: "Lista de espera", colunas: COLUNAS },
   testes: { nome: "Testes", colunas: COLUNAS }
 };
 // Posição (base 0) das colunas usadas para achar inscrição repetida
@@ -35,23 +41,33 @@ function doPost(e) {
   try {
     const d = JSON.parse(e.postData.contents);
     const agora = new Date();
-    const teste = d.teste === true;
+    const teste = d.teste === true || d.teste === "espera";
 
     if (!teste && (agora < ABERTURA || agora > ENCERRAMENTO)) {
       return json({ ok: false, motivo: "fora_do_prazo" });
     }
 
-    const sh = aba(teste ? ABAS.testes : ABAS.inscricoes);
-    const linhas = sh.getLastRow() > 1 ? sh.getRange(2, 1, sh.getLastRow() - 1, COLUNAS.length).getValues() : [];
+    const lerLinhas = sh => sh.getLastRow() > 1 ? sh.getRange(2, 1, sh.getLastRow() - 1, COLUNAS.length).getValues().filter(l => l[COL_PROTOCOLO] !== "") : [];
+    const shInscricoes = aba(teste ? ABAS.testes : ABAS.inscricoes);
+    const shEspera = teste ? shInscricoes : aba(ABAS.espera);
+    const inscritos = lerLinhas(shInscricoes);
+    const espera = teste ? [] : lerLinhas(shEspera);
 
     // Mesmo e-mail ou matrícula: não ocupa outra vaga, devolve o protocolo que já existe
     const email = normal(d.email), matricula = normal(d.matricula);
-    const repetida = linhas.find(l => (email && normal(l[COL_EMAIL]) === email) || (matricula && normal(l[COL_MATRICULA]) === matricula));
+    const igual = l => (email && normal(l[COL_EMAIL]) === email) || (matricula && normal(l[COL_MATRICULA]) === matricula);
+    const repetida = inscritos.find(igual);
     if (repetida) return json({ ok: true, protocolo: repetida[COL_PROTOCOLO], jaInscrito: true });
+    const repetidaEspera = espera.find(igual);
+    if (repetidaEspera) return json({ ok: true, protocolo: repetidaEspera[COL_PROTOCOLO], jaInscrito: true, espera: true });
 
-    if (!teste && linhas.length >= VAGAS) return json({ ok: false, motivo: "esgotado" });
+    // Vagas esgotadas (ou já existe fila): vai para a lista de espera.
+    // Se alguém desistir, a organização apaga a linha em Inscrições e chama a próxima pessoa da Lista de espera.
+    const vaiParaEspera = teste ? d.teste === "espera" || false : (inscritos.length >= VAGAS || espera.length > 0);
+    const sh = vaiParaEspera && !teste ? shEspera : shInscricoes;
+    const linhas = vaiParaEspera && !teste ? espera : inscritos;
 
-    const protocolo = (teste ? "TESTE-" : "OP-") + Utilities.formatDate(agora, "America/Fortaleza", "yyMMdd-HHmmss") + "-" + Math.floor(Math.random() * 900 + 100);
+    const protocolo = (teste ? "TESTE-" : vaiParaEspera ? "ESP-" : "OP-") + Utilities.formatDate(agora, "America/Fortaleza", "yyMMdd-HHmmss") + "-" + Math.floor(Math.random() * 900 + 100);
     const enviadoEm = Utilities.formatDate(agora, "America/Fortaleza", "dd/MM/yyyy HH:mm:ss");
 
     sh.appendRow([
@@ -62,7 +78,7 @@ function doPost(e) {
       "", "", ""
     ].map(seguro));
 
-    return json({ ok: true, protocolo });
+    return json({ ok: true, protocolo, espera: vaiParaEspera });
   } catch (err) {
     return json({ ok: false, erro: String(err) });
   } finally {
