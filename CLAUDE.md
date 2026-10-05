@@ -67,7 +67,7 @@ Formulários existentes:
 | Formulário | Pasta | Planilha |
 |---|---|---|
 | Inscrição de Food Trucks · Festival de Natal Equatorial 2026 | `festival-natal-foodtrucks/` | implantação `AKfycbzsDw9D...KBFwSkE8` (URL completa no `ENDPOINT` do index.html) |
-| Oficina de Produção de Eventos (20 vagas, 16/11 a 04/12) | `oficina-producao-eventos/` | **pendente**: `ENDPOINT` vazio. Testar com `?teste` no endereço (vai para a aba Testes); `?teste=espera` simula vagas esgotadas. Depois da 20ª inscrição as novas vão para a aba Fila de espera |
+| Oficina de Produção de Eventos (20 vagas, 16/11 a 04/12) | `oficina-producao-eventos/` | implantação `AKfycbwED_SY...my1N3qhvw43` (URL completa no `ENDPOINT` do index.html). Testar com `?teste` (aba Testes); `?teste=espera` simula vagas esgotadas. Depois da 20ª inscrição as novas vão para a aba Fila de espera |
 
 ## Publicar
 
