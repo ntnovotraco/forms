@@ -135,18 +135,15 @@ button:focus-visible, .opt:focus-visible, .check:has(input:focus-visible) { outl
 .rules strong { font-weight: 600; }
 
 /* Destaque: certificado para todos + 2 vagas na equipe de produção */
-.bonus { display: grid; gap: .9rem; padding: 1.1rem 1.2rem 1.2rem; border-radius: 8px; background: var(--accent-soft); border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent); }
-.bonus-title { margin: 0; font-size: 1.15rem; font-weight: 600; line-height: 1.3; color: var(--accent); text-wrap: balance; }
+.cert { display: flex; align-items: center; flex-wrap: wrap; gap: .5rem 1.25rem; padding: 1.1rem 1.4rem; border-radius: 8px; background: var(--accent); color: var(--accent-ink); }
+.cert strong { font-size: 3.4rem; font-weight: 700; line-height: 1; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.cert strong small { font-size: 1.3rem; font-weight: 600; letter-spacing: 0; }
+.cert p { margin: 0; display: grid; gap: .1rem; min-width: 0; flex: 1 1 14rem; }
+.cert b { font-size: 1.2rem; font-weight: 600; }
+.bonus { display: grid; gap: .4rem; padding: .9rem 1.1rem 1rem; border-radius: 8px; background: var(--accent-soft); border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent); }
+.bonus-title { margin: 0; font-size: 1.02rem; font-weight: 600; line-height: 1.3; color: var(--accent); text-wrap: balance; }
 .bonus p { margin: 0; }
-.hours { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; }
-.hours div { display: grid; gap: .1rem; align-content: start; padding: .75rem .9rem; border-radius: 6px; background: var(--bg); }
-.hours .star { background: var(--accent); color: var(--accent-ink); }
-.hours span { font-size: .85rem; font-weight: 500; }
-.hours strong { font-size: 1.9rem; font-weight: 700; line-height: 1.1; letter-spacing: -.01em; font-variant-numeric: tabular-nums; }
-.hours strong small { font-size: .95rem; font-weight: 600; letter-spacing: 0; }
-.hours em { font-style: normal; font-size: .85rem; }
-.hours div:not(.star) span, .hours div:not(.star) em { color: var(--muted); }
-.hours div:not(.star) strong { color: var(--accent); }
+.bonus p:not(.bonus-title) { color: var(--muted); font-size: .95rem; }
 .status { margin: 0; justify-self: start; padding: .45rem .8rem; border-radius: 6px; background: var(--accent-soft); color: var(--accent); font-weight: 600; }
 .status.closed { background: var(--error-soft); color: var(--error); }
 .test-banner { position: fixed; left: 0; right: 0; bottom: 0; padding: .45rem 1rem calc(.45rem + env(safe-area-inset-bottom, 0px)); background: #fff4d6; color: #6b4e00; font-size: .85rem; text-align: center; z-index: 6; }
@@ -175,7 +172,8 @@ button:focus-visible, .opt:focus-visible, .check:has(input:focus-visible) { outl
   .big { font-size: 1.12rem; }
   .opt { font-size: 1rem; }
   .btn.big-btn { font-size: 1.08rem; }
-  .hours strong { font-size: 1.6rem; }
+  .cert strong { font-size: 2.8rem; }
+  .cert b { font-size: 1.1rem; }
   input, select, textarea { font-size: max(16px, 1rem); }
 }
 
@@ -208,13 +206,14 @@ button:focus-visible, .opt:focus-visible, .check:has(input:focus-visible) { outl
       <div><dt>Vagas</dt><dd>Limitadas, por ordem de inscrição<span class="left" id="vagasLeft" hidden></span></dd></div>
     </dl>
 
+    <div class="cert">
+      <strong>8h<small>/aula</small></strong>
+      <p><b>de estágio no certificado</b>Todos os participantes recebem certificado de participação.</p>
+    </div>
+
     <div class="bonus">
-      <p class="bonus-title">2 participantes vão para a equipe de produção do evento</p>
-      <p>Durante a oficina, vamos observar a turma. Os 2 que mais se destacarem trabalham com a gente na montagem e no evento, como parte da equipe.</p>
-      <div class="hours">
-        <div><span>Todos os participantes</span><strong>8h<small>/aula</small></strong><em>de estágio no certificado</em></div>
-        <div class="star"><span>Os 2 escolhidos</span><strong>32h<small>/aula</small></strong><em>8h da oficina + 24h do evento (3 dias de 8h)</em></div>
-      </div>
+      <p class="bonus-title">Bônus: 2 participantes vão para a equipe de produção do evento</p>
+      <p>Durante a oficina, vamos observar a turma. Os 2 que mais se destacarem trabalham com a gente na montagem e no evento e ganham mais 24h/aula de estágio (3 dias de 8h).</p>
     </div>
 
     <p class="status" id="status" hidden></p>
