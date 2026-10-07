@@ -168,6 +168,8 @@ textarea.big { resize: none; min-height: 3.2rem; line-height: 1.4; }
 .btn.big-btn { font-size: 1.2rem; padding: .7rem 1.5rem; }
 .hint { color: var(--muted); font-size: .85rem; }
 .hint b { font-weight: 600; }
+.contact { margin: .5rem 0 0; color: var(--muted); font-size: .92rem; overflow-wrap: anywhere; }
+.contact a { color: var(--accent); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; user-select: all; }
 .error { display: inline-flex; align-items: center; gap: .4rem; justify-self: start; color: var(--error); background: var(--error-soft); border-radius: 4px; padding: .3rem .65rem; font-size: .92rem; }
 .error:empty { display: none; }
 .submit-area { display: grid; gap: 1rem; padding-top: 2.5rem; }
@@ -242,6 +244,7 @@ button:focus-visible, .opt:focus-visible, .check:has(input:focus-visible), .item
       <button type="button" class="btn big-btn" data-go="regras">Começar</button>
       <span class="hint">pressione <b>Enter ↵</b> · leva cerca de 5 minutos</span>
     </div>
+    <p class="contact">Dúvidas? Escreva para <a href="mailto:alimentacao.natalequatorial@gmail.com">alimentacao.natalequatorial@gmail.com</a></p>
   </section>
 
   <!-- Regras -->
@@ -266,6 +269,7 @@ button:focus-visible, .opt:focus-visible, .check:has(input:focus-visible), .item
       <button type="button" class="btn" data-go="perguntas">Li as regras ✓</button>
       <span class="hint">pressione <b>Enter ↵</b></span>
     </div>
+    <p class="contact">Dúvidas? Escreva para <a href="mailto:alimentacao.natalequatorial@gmail.com">alimentacao.natalequatorial@gmail.com</a></p>
   </section>
 
   <!-- Todas as perguntas -->
@@ -458,6 +462,7 @@ button:focus-visible, .opt:focus-visible, .check:has(input:focus-visible), .item
     <div class="submit-area">
       <span class="error" id="submitError"></span>
       <div class="actions"><button type="submit" class="btn big-btn" id="submitBtn">Enviar inscrição</button></div>
+      <p class="contact">Dúvidas? Escreva para <a href="mailto:alimentacao.natalequatorial@gmail.com">alimentacao.natalequatorial@gmail.com</a></p>
     </div>
   </section>
 
@@ -467,6 +472,7 @@ button:focus-visible, .opt:focus-visible, .check:has(input:focus-visible), .item
     <h1 id="doneTitle">Obrigado!</h1>
     <p class="lead">A organização vai avaliar todas as propostas ao fim do período de inscrições e entrar em contato com as 5 operações selecionadas pelo WhatsApp e e-mail informados.</p>
     <p class="hint" id="protocolo"></p>
+    <p class="contact">Dúvidas? Escreva para <a href="mailto:alimentacao.natalequatorial@gmail.com">alimentacao.natalequatorial@gmail.com</a></p>
   </section>
 
 </form>
