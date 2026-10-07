@@ -23,7 +23,7 @@ const ABAS = {
   equipamentos: { nome: "Equipamentos", colunas: ["Protocolo", "Nome fantasia", "Equipamento", "Qtd.", "Carga (kVA)", "Voltagem", "Amperagem"] }
 };
 
-const TOTAL_ACEITES = 7;
+const TOTAL_ACEITES = 8;
 
 function doPost(e) {
   const lock = LockService.getScriptLock();
